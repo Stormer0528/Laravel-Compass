@@ -75,4 +75,11 @@ class AuthenticatorHelper extends TestCase
         $response->assertStatus(200);
         $response->assertSee('bar');
     }
+
+    protected function getDocumentSetup($app)
+    {
+        parent::getDocumentSetup($app);
+
+        $app->get('config')->set('auth.providers.users.model', UserTest::class);
+    }
 }
