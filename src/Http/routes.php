@@ -11,6 +11,7 @@ Route::get('/response/{uuid}', 'ResponseController@show')->name('response.show')
 Route::delete('/response/{uuid}', 'ResponseController@destroy')->name('response.destroy');
 
 Route::get('/credentials', 'CredentialController')->name('credentials');
+Route::get('/results', 'resultController')->name('results');
 
 // Catch-all Route.
 Route::get('/{view?}', 'HomeController')->where('view', '(.*)')->name('home');
