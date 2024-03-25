@@ -117,6 +117,26 @@ class CompassServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the package database storage driver.
+     *
+     * @return void
+     */
+    protected function registerGeneralDriver()
+    {
+        $this->app->singleton(
+            RequestRepository::class, DatabaseRequestRepository::class
+        );
+
+        $this->app->singleton(
+            ResponseRepository::class, DatabaseResponseRepository::class
+        );
+
+        $this->app->when(DatabaseRequestRepository::class)
+            ->needs('$connection')
+            ->give(config('compass.storage.database.connection'));
+    }
+
+    /**
      * Register the package storage driver.
      *
      * @return void
