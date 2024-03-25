@@ -133,6 +133,27 @@ class DatabaseRequestRepository implements RequestRepository
             ->get()
             ->toArray();
     }
+    
+    /**
+     * filter the route with the given ID.
+     *
+     * @param  string  $id
+     * @return \Davidhsianturi\Compass\RouteResult
+     */
+    public function filter(string $id): RouteResult
+    {
+        $route = Compass::syncRoute($this->routesInStorage())
+            ->whereStrict('route_hash', $id)
+            ->first();
+
+        $responses = $this->table('compass_routeables')
+            ->whereExample(true)
+            ->where('route_hash', $id)
+            ->get()
+            ->toArray();
+
+        return $this->routeResult($route, $responses);
+    }
 
     /**
      * Get a query builder instance for the given table.
