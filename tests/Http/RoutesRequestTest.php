@@ -23,6 +23,22 @@ class RoutesRequestTest extends TestCase
         $this->repository = new DatabaseRequestRepository('testbench');
     }
 
+    public function test_update_route_request()
+    {
+        $route = $this->repository->find($this->routeFactory()->route_hash)->jsonSerialize();
+
+        $updateAttribute = array_merge($route, ['title' => 'List All Invoices']);
+
+        $this->postJson(route('compass.request.store'), $updateAttribute)
+            ->assertSuccessful()
+            ->assertJson([
+                'id' => $updateAttribute['id'],
+                'storageId' => $updateAttribute['storageId'],
+                'title' => 'List All Invoices',
+                'content' => $updateAttribute['content'],
+            ]);
+    }
+
     public function test_get_all_routes_request()
     {
         $this->registerAppRoutes();
