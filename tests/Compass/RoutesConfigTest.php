@@ -117,4 +117,26 @@ class RoutesConfigTest extends TestCase
 
         $this->assertEquals($expectedResult, $groupedRoutes->toArray());
     }
+
+    public function test_filter_app_routes_from_http_rule()
+    {
+        $this->registerAppRoutes();
+
+        config(['compass.routes.https' => ['http1.*', 'http2.*']]);
+        $this->assertCount(12, Compass::getAppRoutes());
+
+        config(['compass.routes.https' => ['http1.*']]);
+        $this->assertCount(6, $routes = Compass::getAppRoutes());
+        foreach ($routes as $route) {
+            $this->assertStringContainsString('http1', $route['http']);
+            $this->assertStringNotContainsString('http2', $route['http']);
+        }
+
+        config(['compass.routes.https' => ['http2.*']]);
+        $this->assertCount(6, $routes = Compass::getAppRoutes());
+        foreach ($routes as $route) {
+            $this->assertStringContainsString('http2', $route['http']);
+            $this->assertStringNotContainsString('http1', $route['http']);
+        }
+    }
 }
